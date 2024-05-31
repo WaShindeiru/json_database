@@ -14,6 +14,6 @@
 
 you might use this flag to specify path to a file containing a command to be executed, in json format
 
-Example:
--in "test.json"
+Example:\
+-in "test.json"\
 -t "get" -k "person"
