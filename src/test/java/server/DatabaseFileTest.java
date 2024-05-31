@@ -1,11 +1,10 @@
 package server;
 
-import junit.framework.TestCase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-public class DatabaseFileTest extends TestCase {
+public class DatabaseFileTest {
 
     private DatabaseFile databaseFile;
 

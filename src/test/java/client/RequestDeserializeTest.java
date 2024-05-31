@@ -2,13 +2,14 @@ package client;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class RequestDeserializeTest extends TestCase {
+public class RequestDeserializeTest {
 
     private RequestDeserializer deserializer = new RequestDeserializer();
     private Gson gson = new GsonBuilder().registerTypeAdapter(Request.class, new RequestDeserializer()).create();
 
+    @Test
     public void testDeserialize() {
         String testJson2 = """
               {
