@@ -1,5 +1,5 @@
 # Hyperskill_JSON_Database
-## Server arguments:
+## Client arguments:
 -t command
 * get - get value with specified key
 * set - set value
