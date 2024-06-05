@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class DatabaseFile {
 
 //    private final static String databasePath = "./db.json";
-    private final static String databasePath = "./src/main/java/server/data/db.json";
+    private final String databasePath;
     private final FileAccess fileAccess;
     private final Gson gson;
     private final JsonObject inMemory;
@@ -19,7 +19,8 @@ public class DatabaseFile {
     private Lock readLock = lock.readLock();
     private Lock writeLock = lock.writeLock();
 
-    public DatabaseFile() {
+    public DatabaseFile(String filePath) {
+        this.databasePath = filePath;
         JsonObject inMemoryTemp;
         fileAccess = new FileAccess();
         gson = new GsonBuilder().setPrettyPrinting().create();
@@ -35,6 +36,10 @@ public class DatabaseFile {
             }
         }
         inMemory = inMemoryTemp;
+    }
+
+    public DatabaseFile() {
+        this("./src/main/java/server/data/db.json");
     }
 
     private JsonObject getDatabase() throws IOException {
@@ -103,9 +108,11 @@ public class DatabaseFile {
         if (tempElement.isJsonPrimitive()) {
             return tempElement.getAsJsonPrimitive();
 
-        } else {
+        } else if (tempElement.isJsonObject()) {
             return tempElement.getAsJsonObject();
-        }
+        } else if (tempElement.isJsonArray()) {
+            return tempElement.getAsJsonArray();
+        } else throw new WrongArgumentException("No such type!");
     }
 
     public void delete(JsonArray keyArray) throws WrongArgumentException, IOException {
@@ -134,5 +141,9 @@ public class DatabaseFile {
         } finally {
             writeLock.unlock();
         }
+    }
+
+    public FileAccess getFileAccess() {
+        return fileAccess;
     }
 }

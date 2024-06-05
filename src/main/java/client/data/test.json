@@ -1,12 +1,17 @@
 {
   "type":"set",
   "key":"person",
-  "value":{
+  "value":
+  {
     "name":"Elon Musk",
-    "car":{
+    "car":[{
       "model":"Tesla Roadster",
       "year":"2018"
     },
+      {
+        "model":"Teslaa",
+        "year":"2019"
+      }],
     "rocket":{
       "name":"Falcon 9",
       "launches":"87"

@@ -9,15 +9,14 @@ import java.util.concurrent.Executors;
 
 public class Server {
 
-    private final DatabaseManagement service;
     private ExecutorService executorService = Executors.newFixedThreadPool(4);
     private ServerSocket server;
+    private DatabaseFile database = new DatabaseFile();
 
     private final static String address = "127.0.0.1";
     private final static int port = 23456;
 
     public Server() {
-        service = new DatabaseManagement();
         try {
             server = new ServerSocket(port, 50, InetAddress.getByName(address));
         } catch (IOException e) {
@@ -32,7 +31,7 @@ public class Server {
             while (!server.isClosed()) {
                 try {
                     Socket socket = server.accept();
-                    ServerThread thread = new ServerThread(socket, service, this);
+                    ServerThread thread = new ServerThread(socket, this, database);
                     executorService.execute(thread);
 
                 } catch (IOException swallow) {}

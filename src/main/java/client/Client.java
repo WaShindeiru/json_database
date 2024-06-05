@@ -2,6 +2,7 @@ package client;
 
 import com.beust.jcommander.JCommander;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import server.FileAccess;
 
 import java.io.DataInputStream;
@@ -18,6 +19,7 @@ public class Client {
     private FileAccess fileAccess = new FileAccess();
 //    private final static String path = "./JSON Database with Java/task/src/client/data/";
     private final static String path = "./src/main/java/client/data/";
+    private final Gson gson = new Gson();
 
     public void connect(String[] args) {
 
@@ -42,6 +44,9 @@ public class Client {
             if (clientArgs.filePath != null) {
                try {
                   toSend = fileAccess.readFromFile(path + clientArgs.filePath);
+                  // check if JSON is valid
+                  gson.fromJson(toSend, Request.class);
+
                } catch (IOException e) {
                   System.out.println("Wrong file path");
                   throw new IOException(e);
@@ -60,7 +65,9 @@ public class Client {
             System.out.println("Received: " + received);
 
         } catch (IOException e) {
-            System.out.println("Socket error");
+           System.out.println("Socket error");
+        } catch (JsonSyntaxException e) {
+           System.out.println("The JSON file is not correct");
         }
     }
 }
