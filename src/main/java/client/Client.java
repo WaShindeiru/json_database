@@ -2,6 +2,7 @@ package client;
 
 import com.beust.jcommander.JCommander;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import server.FileAccess;
 
@@ -19,7 +20,7 @@ public class Client {
     private FileAccess fileAccess = new FileAccess();
 //    private final static String path = "./JSON Database with Java/task/src/client/data/";
     private final static String path = "./src/main/java/client/data/";
-    private final Gson gson = new Gson();
+    private final Gson gson = new GsonBuilder().registerTypeAdapter(Request.class, new RequestDeserializer()).create();
 
     public void connect(String[] args) {
 
