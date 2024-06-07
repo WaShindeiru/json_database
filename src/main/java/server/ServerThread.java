@@ -4,6 +4,7 @@ import client.Request;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import server.command.*;
 
 import java.io.*;
 import java.net.Socket;
@@ -14,12 +15,14 @@ public class ServerThread implements Runnable {
     private Server server;
     private DatabaseFile database;
     private Gson gson;
+    private boolean closeServer;
 
     public ServerThread(Socket socket, Server server, DatabaseFile database) {
         this.socket = socket;
         this.server = server;
         this.database = database;
         this.gson = new Gson();
+        this.closeServer = false;
     }
 
     @Override
@@ -34,77 +37,96 @@ public class ServerThread implements Runnable {
             System.out.println("Received: " + received);
 
             Request request = new Gson().fromJson(received, Request.class);
+            Response response;
 
-            toSend = this.takeActionJson(request);
+            DatabaseCommand command = getCommannd(request);
+
+            try {
+                response = command.execute(request);
+            } catch (WrongArgumentException e1) {
+                response = new Response("ERROR", null, e1.getMessage());
+            } catch (IOException e2) {
+                System.out.println("Can't access the database file!");
+                response = new Response("ERROR", null, "Can't access the database file!");
+            }
+
+            toSend = gson.toJson(response);
             output.writeUTF(toSend);
             System.out.println("Sent: " + toSend);
 
-            if (request.type.equals("exit")) {
+            if (closeServer) {
                 socket.close();
                 server.stopServer();
             }
 
         } catch (IOException swallow) {
+            swallow.printStackTrace();
         }
     }
 
+    public DatabaseCommand getCommannd(Request request) {
+        String type = request.type;
+        DatabaseCommand command;
 
-    public String takeActionJson(Request request) {
+        switch (type) {
+            case "set" -> command = this::setCommand;
+            case "get" -> command = this::getCommand;
+            case "delete" -> command = this::deleteCommand;
+            case "exit" -> command = this::exitCommand;
+            default -> command = this::defuaultCommand;
+        }
 
-        String command = request.type;
-        JsonElement key = request.key;
-        JsonElement value = request.value;
-        String result = "";
+        return command;
+    }
+
+    public Response getCommand(Request request) throws WrongArgumentException, IOException {
+        JsonArray keyArray = transformJsonElementIntoJsonArray(request.key);
         Response response;
 
-        JsonArray keyArray = new JsonArray();
+        JsonElement temp = database.get(keyArray);
+        response = new Response("OK", temp, null);
+        return response;
+    }
 
-        // key is a single value, transform it into array
-        if (key != null && key.isJsonPrimitive()) {
-            String keyString = key.getAsString();
-            keyArray = new JsonArray();
-            keyArray.add(gson.fromJson(keyString, JsonElement.class));
-        } else if (key != null && key.isJsonArray()) {
-            keyArray = key.getAsJsonArray();
+    public Response setCommand(Request request) throws WrongArgumentException, IOException {
+        JsonArray keyArray = transformJsonElementIntoJsonArray(request.key);
+        JsonElement value = request.value;
+        Response response;
+
+        database.set(keyArray, value);
+        response = new Response("OK", null, null);
+        return response;
+    }
+
+    public Response exitCommand(Request request) {
+        closeServer = true;
+        return new Response("OK", null, null);
+    }
+
+    public Response deleteCommand(Request request) throws WrongArgumentException, IOException {
+        JsonArray keyArray = transformJsonElementIntoJsonArray(request.key);
+        Response response;
+
+        database.delete(keyArray);
+        response = new Response("OK", null, null);
+        return response;
+    }
+
+    public Response defuaultCommand(Request request) {
+       return new Response("ERROR", null, null);
+    }
+
+    public JsonArray transformJsonElementIntoJsonArray(JsonElement jsonElement) {
+        JsonArray resultArray = new JsonArray();
+
+        if (jsonElement != null && jsonElement.isJsonPrimitive()) {
+            String jsonElementString = jsonElement.getAsString();
+            resultArray = new JsonArray();
+            resultArray.add(gson.fromJson(jsonElementString, JsonElement.class));
+        } else if (jsonElement != null && jsonElement.isJsonArray()) {
+            resultArray = jsonElement.getAsJsonArray();
         }
 
-        try {
-            switch (command) {
-                case "set":
-                    database.set(keyArray, value);
-                    response = new Response("OK", null, null);
-                    result = gson.toJson(response);
-                    break;
-
-                case "delete":
-                    database.delete(keyArray);
-                    response = new Response("OK", null, null);
-                    result = gson.toJson(response);
-                    break;
-
-                case "get":
-                    JsonElement temp = database.get(keyArray);
-                    response = new Response("OK", temp, null);
-                    result = gson.toJson(response);
-                    break;
-
-                case "exit":
-                    response = new Response("OK", null, null);
-                    result = gson.toJson(response);
-                    break;
-
-                default:
-                    response = new Response("ERROR", null, null);
-                    result = gson.toJson(response);
-            }
-
-        } catch (WrongArgumentException e) {
-            response = new Response("ERROR", null, e.getMessage());
-            result = gson.toJson(response);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return result;
+        return resultArray;
     }
 }
