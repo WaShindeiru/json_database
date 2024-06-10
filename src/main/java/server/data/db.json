@@ -1,21 +1,15 @@
 {
-  "1": "Hello world!",
-  "test": "test1",
   "person": {
     "name": "Elon Musk",
-    "car": [
-      {
-        "model": "Tesla Roadster",
-        "year": "2018"
-      },
-      {
-        "model": "Teslaa",
-        "year": "2019"
-      }
-    ],
     "rocket": {
       "name": "Falcon 9",
       "launches": "87"
+    }
+  },
+  "name": "Kate",
+  "name1": {
+    "name2": {
+      "name3": "Kate"
     }
   }
 }

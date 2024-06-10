@@ -73,7 +73,7 @@ public class ServerThread implements Runnable {
             case "get" -> command = this::getCommand;
             case "delete" -> command = this::deleteCommand;
             case "exit" -> command = this::exitCommand;
-            default -> command = this::defuaultCommand;
+            default -> command = this::defaultCommand;
         }
 
         return command;
@@ -112,7 +112,7 @@ public class ServerThread implements Runnable {
         return response;
     }
 
-    public Response defuaultCommand(Request request) {
+    public Response defaultCommand(Request request) {
        return new Response("ERROR", null, null);
     }
 

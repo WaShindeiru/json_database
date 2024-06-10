@@ -11,17 +11,22 @@ public class Server {
 
     private ExecutorService executorService = Executors.newFixedThreadPool(4);
     private ServerSocket server;
-    private DatabaseFile database = new DatabaseFile();
+    private DatabaseFile database;
 
     private final static String address = "127.0.0.1";
     private final static int port = 23456;
 
-    public Server() {
+    public Server(String path) {
+        database = new DatabaseFile(path);
         try {
             server = new ServerSocket(port, 50, InetAddress.getByName(address));
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Server() {
+        this("./src/main/java/server/data/db.json");
     }
 
     public void serve() {
@@ -48,5 +53,9 @@ public class Server {
                 e.printStackTrace();
             }
         }
+    }
+
+    public synchronized boolean isRunning() {
+        return !this.server.isClosed();
     }
 }

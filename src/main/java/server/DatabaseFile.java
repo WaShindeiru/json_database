@@ -59,10 +59,13 @@ public class DatabaseFile {
                 if (temp.has(keyTemp)) {
                     if (temp.get(keyTemp).isJsonObject())
                         temp = temp.get(keyTemp).getAsJsonObject();
-                    else
-                        throw new WrongArgumentException("No such key");
+                    else {
+                        temp = setInnerJsonObject(keyArray, temp, i, keyTemp);
+                        break;
+                    }
                 } else {
-                    throw new WrongArgumentException("No such key");
+                    temp = setInnerJsonObject(keyArray, temp, i, keyTemp);
+                    break;
                 }
             }
 
@@ -74,6 +77,21 @@ public class DatabaseFile {
         } finally {
             writeLock.unlock();
         }
+    }
+
+    private JsonObject setInnerJsonObject(JsonArray keyArray, JsonObject temp, int i, String keyTemp) {
+        JsonObject tempInner = new JsonObject();
+        JsonObject head = tempInner.getAsJsonObject();
+
+        for (int j=i + 1; j<keyArray.size() - 1; j++) {
+            String keyTempInner = keyArray.get(j).getAsString();
+            tempInner.add(keyTempInner, new JsonObject());
+            tempInner = tempInner.getAsJsonObject(keyTempInner);
+        }
+
+        temp.add(keyTemp, head);
+        temp = tempInner;
+        return temp;
     }
 
     public JsonElement get(JsonArray keyArray) throws WrongArgumentException, IOException {
@@ -133,7 +151,10 @@ public class DatabaseFile {
                     throw new WrongArgumentException("No such key");
             }
 
-            temp.remove(keyArray.get(keyArray.size() - 1).getAsString());
+            if (temp.has(keyArray.get(keyArray.size() - 1).getAsString())) {
+                temp.remove(keyArray.get(keyArray.size() - 1).getAsString());
+            } else
+                throw new WrongArgumentException("No such key");
 
             String result = gson.toJson(inMemory);
             fileAccess.writeToFile(databasePath, result);

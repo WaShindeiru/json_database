@@ -1,1 +1,1 @@
-{"type":"delete","key":"person"}
+{"type":"delete","key":["person", "car"]}

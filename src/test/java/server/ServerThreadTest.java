@@ -1,64 +1,74 @@
 package server;
 
 import client.Request;
+import client.RequestDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 
-class ServerThreadTest {
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-   private Server server;
+@ExtendWith(MockitoExtension.class)
+public class ServerThreadTest {
    private static String databasePath = "./src/test/resources/db.json";
-   private DatabaseFile database = new DatabaseFile(databasePath);
-   private FileAccess fileAccess = database.getFileAccess();
-   private ServerThread serverThread;
-   private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+   private static Gson gson = new GsonBuilder().registerTypeAdapter(Request.class, new RequestDeserializer()).create();
 
-   public ServerThreadTest() {
-      server = new Server();
+   @Mock
+   private Socket socket;
+   @Mock
+   private Server server;
+   private DatabaseFile database;
+   private ServerThread session;
+   private FileAccess fileAccess = new FileAccess();
+
+   @BeforeEach
+   public void beforeEach() {
+      String inputJson = "{\"Bulbasaur\": \"grass\"}";
+      try {
+         fileAccess.writeToFile(databasePath, inputJson);
+      } catch (IOException e) {
+         fail("Exception thrown when not expected");
+      }
+      database = new DatabaseFile(databasePath);
+
+      session = new ServerThread(socket, server, database);
    }
 
    @Test
-   @Disabled
-   void takeActionJsonAdd() throws IOException {
-      fileAccess.writeToFile(databasePath, "{\n}");
-      serverThread = new ServerThread(new Socket(), server, database);
-      Request request = new Request("set", new JsonPrimitive("test"), new JsonPrimitive("test1"));
+   public void test_happy_path_run() throws IOException {
+      ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+      DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
+      dataOutputStream.writeUTF("{\"type\":\"get\",\"key\":\"Bulbasaur\"}");
+      dataOutputStream.flush();
+      dataOutputStream.close();
+      ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+      DataInputStream input = new DataInputStream(byteArrayInputStream);
 
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      DataOutputStream output = new DataOutputStream(baos);
+      Mockito.when(socket.getInputStream()).thenReturn(input);
+      Mockito.when(socket.getOutputStream()).thenReturn(output);
 
-      String temp = fileAccess.readFromFile(databasePath);
-      JsonObject object = gson.fromJson(temp, JsonObject.class);
+      session.run();
 
-      Assertions.assertTrue(object.has("test"));
-      Assertions.assertEquals(object.get("test").getAsString(), "test1");
-   }
+      byte[] data = baos.toByteArray();
+      DataInputStream testInput = new DataInputStream(new ByteArrayInputStream(data));
+      String resultString = testInput.readUTF();
 
-   @Test
-   @Disabled
-   void takeActionJsonGet() throws IOException {
-      fileAccess.writeToFile(databasePath, "{\"test\": \"test1\"}");
-      serverThread = new ServerThread(new Socket(), server, database);
-      Request request = new Request("get", new JsonPrimitive("test"), new JsonPrimitive("test1"));
-   }
-
-   @Test
-   @Disabled
-   void takeActionJsonRemove() throws IOException {
-      fileAccess.writeToFile(databasePath, "{\"test\": \"test1\"}");
-      serverThread = new ServerThread(new Socket(), server, database);
-      Request request = new Request("delete", new JsonPrimitive("test"), null);
-
-
-      String temp = fileAccess.readFromFile(databasePath);
-      JsonObject object = gson.fromJson(temp, JsonObject.class);
-
-      Assertions.assertFalse(object.has("test"));
+      Response response = gson.fromJson(resultString, Response.class);
+      assertNotNull(response);
+      assertThat(response.response).isEqualTo("OK");
+      assertThat(response.value).isEqualTo(new JsonPrimitive("grass"));
    }
 }
