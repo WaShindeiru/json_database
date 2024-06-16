@@ -1,4 +1,4 @@
-package server;
+package server.response;
 
 import com.google.gson.JsonElement;
 

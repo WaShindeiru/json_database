@@ -1,10 +1,13 @@
 package server;
 
-import client.Request;
+import client.request.Request;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import server.command.*;
+import server.database.DatabaseFile;
+import server.exception.WrongArgumentException;
+import server.response.Response;
 
 import java.io.*;
 import java.net.Socket;

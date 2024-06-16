@@ -1,6 +1,7 @@
-package server;
+package server.database;
 
 import com.google.gson.*;
+import server.exception.WrongArgumentException;
 
 import java.io.IOException;
 import java.util.concurrent.locks.Lock;

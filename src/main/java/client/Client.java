@@ -1,10 +1,13 @@
 package client;
 
+import client.args.Args;
+import client.request.Request;
+import client.request.RequestDeserializer;
 import com.beust.jcommander.JCommander;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import server.FileAccess;
+import server.database.FileAccess;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

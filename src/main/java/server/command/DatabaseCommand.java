@@ -1,8 +1,8 @@
 package server.command;
 
-import client.Request;
-import server.Response;
-import server.WrongArgumentException;
+import client.request.Request;
+import server.response.Response;
+import server.exception.WrongArgumentException;
 
 import java.io.IOException;
 

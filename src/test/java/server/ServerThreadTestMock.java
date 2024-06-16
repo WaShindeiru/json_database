@@ -1,7 +1,7 @@
 package server;
 
-import client.Request;
-import client.RequestDeserializer;
+import client.request.Request;
+import client.request.RequestDeserializer;
 import com.google.gson.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +11,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import server.command.DatabaseCommand;
+import server.database.DatabaseFile;
+import server.exception.WrongArgumentException;
+import server.response.Response;
 
 import java.io.*;
 import java.net.Socket;

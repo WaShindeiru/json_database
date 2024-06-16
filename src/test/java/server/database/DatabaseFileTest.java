@@ -1,11 +1,11 @@
-package server;
+package server.database;
 
-import client.Request;
-import client.RequestDeserializer;
+import client.request.Request;
+import client.request.RequestDeserializer;
 import com.google.gson.*;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import server.exception.WrongArgumentException;
 
 import java.io.IOException;
 

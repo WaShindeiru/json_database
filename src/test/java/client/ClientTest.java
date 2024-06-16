@@ -1,11 +1,13 @@
 package client;
 
+import client.request.Request;
+import client.request.RequestDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonPrimitive;
 import org.junit.jupiter.api.Test;
-import server.FileAccess;
-import server.Response;
+import server.database.FileAccess;
+import server.response.Response;
 import server.Server;
 
 import java.io.DataInputStream;
