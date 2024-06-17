@@ -9,8 +9,8 @@ public class ServerTest {
 
    @Test
    public void test_server_closes() {
-      Server server = new Server();
-      Thread serverThread = new Thread(() -> server.serve());
+      Server server = new Server(23455, "127.0.0.2");
+      Thread serverThread = new Thread(server::serve);
       serverThread.start();
 
       try {

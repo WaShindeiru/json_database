@@ -15,16 +15,26 @@ public class Server {
     private ServerSocket server;
     private DatabaseFile database;
 
-    private final static String address = "127.0.0.1";
-    private final static int port = 23456;
+    private static String address;
+    private static int port;
 
-    public Server(String path) {
+    public Server(String path, int port, String address) {
+        this.port = port;
+        this.address = address;
         database = new DatabaseFile(path);
         try {
             server = new ServerSocket(port, 50, InetAddress.getByName(address));
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Server(int port, String address) {
+        this("./src/main/java/server/data/db.json", port, address);
+    }
+
+    public Server(String path) {
+        this(path, 23456, "127.0.0.1");
     }
 
     public Server() {
