@@ -31,7 +31,7 @@ public class Client {
     }
 
     public Client() {
-       this("./src/main/java/client/data/");
+       this("./src/main/resources/");
     }
 
     public DataInputStream getInput() {
