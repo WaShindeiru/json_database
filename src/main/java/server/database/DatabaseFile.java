@@ -95,7 +95,7 @@ public class DatabaseFile {
         return temp;
     }
 
-    public JsonElement get(JsonArray keyArray) throws WrongArgumentException, IOException {
+    public JsonElement get(JsonArray keyArray) throws WrongArgumentException {
 
         JsonElement tempElement;
 

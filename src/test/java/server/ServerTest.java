@@ -14,7 +14,7 @@ public class ServerTest {
       serverThread.start();
 
       try {
-         Thread.sleep(500); // Give the server some time to start
+         Thread.sleep(500);
       } catch (InterruptedException e) {
          fail("Server thread interrupted");
       }
