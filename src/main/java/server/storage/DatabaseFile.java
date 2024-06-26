@@ -1,4 +1,4 @@
-package server.database;
+package server.storage;
 
 import com.google.gson.*;
 import server.exception.WrongArgumentException;
@@ -10,7 +10,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class DatabaseFile {
 
-//    private final static String databasePath = "./db.json";
     private final String databasePath;
     private final FileAccess fileAccess;
     private final Gson gson;
@@ -40,7 +39,7 @@ public class DatabaseFile {
     }
 
     public DatabaseFile() {
-        this("./src/main/java/server/data/db.json");
+        this("./src/main/resources/db.json");
     }
 
     private JsonObject getDatabase() throws IOException {

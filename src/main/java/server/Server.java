@@ -1,6 +1,7 @@
 package server;
 
-import server.database.DatabaseFile;
+import server.internal.ServerThread;
+import server.storage.DatabaseFile;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -30,7 +31,7 @@ public class Server {
     }
 
     public Server(int port, String address) {
-        this("./src/main/java/server/data/db.json", port, address);
+        this("./src/main/resources/db.json", port, address);
     }
 
     public Server(String path) {
@@ -38,7 +39,7 @@ public class Server {
     }
 
     public Server() {
-        this("./src/main/java/server/data/db.json");
+        this("./src/main/resources/db.json");
     }
 
     public void serve() {

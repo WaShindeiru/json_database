@@ -1,11 +1,12 @@
-package server;
+package server.internal;
 
 import client.request.Request;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import server.Server;
 import server.command.*;
-import server.database.DatabaseFile;
+import server.storage.DatabaseFile;
 import server.exception.WrongArgumentException;
 import server.response.Response;
 

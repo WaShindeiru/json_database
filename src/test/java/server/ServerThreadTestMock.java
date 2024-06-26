@@ -11,7 +11,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import server.command.DatabaseCommand;
-import server.database.DatabaseFile;
+import server.internal.ServerThread;
+import server.storage.DatabaseFile;
 import server.exception.WrongArgumentException;
 import server.response.Response;
 

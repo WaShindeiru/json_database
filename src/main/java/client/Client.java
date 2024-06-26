@@ -7,7 +7,7 @@ import com.beust.jcommander.JCommander;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import server.database.FileAccess;
+import server.storage.FileAccess;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

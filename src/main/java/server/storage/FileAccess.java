@@ -1,4 +1,4 @@
-package server.database;
+package server.storage;
 
 import java.io.*;
 

@@ -11,8 +11,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import server.database.DatabaseFile;
-import server.database.FileAccess;
+import server.internal.ServerThread;
+import server.storage.DatabaseFile;
+import server.storage.FileAccess;
 import server.response.Response;
 
 import java.io.*;

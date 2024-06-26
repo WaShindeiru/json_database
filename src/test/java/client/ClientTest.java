@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonPrimitive;
 import org.junit.jupiter.api.Test;
-import server.database.FileAccess;
+import server.storage.FileAccess;
 import server.response.Response;
 import server.Server;
 

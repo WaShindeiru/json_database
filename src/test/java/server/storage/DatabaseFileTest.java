@@ -1,4 +1,4 @@
-package server.database;
+package server.storage;
 
 import client.request.Request;
 import client.request.RequestDeserializer;
@@ -77,7 +77,7 @@ public class DatabaseFileTest {
       JsonElement result = null;
       try {
          result = database.get(keyArray);
-      } catch (WrongArgumentException | IOException e) {
+      } catch (WrongArgumentException e) {
          fail("Exception thrown when not expected");
       }
 
@@ -130,7 +130,7 @@ public class DatabaseFileTest {
       JsonElement result = null;
       try {
          result = database.get(keyArray);
-      } catch (WrongArgumentException | IOException e) {
+      } catch (WrongArgumentException e) {
          fail("Exception thrown when not expected");
       }
       assertThat(result != null).isTrue();
@@ -178,7 +178,7 @@ public class DatabaseFileTest {
          JsonElement result = databaseFile.get(keyArray);
          assertThat(result.isJsonPrimitive()).isTrue();
          assertThat(result.getAsString()).isEqualTo("value");
-      } catch (WrongArgumentException | IOException e) {
+      } catch (WrongArgumentException e) {
          fail("Exception thrown when not expected");
       }
    }
@@ -209,7 +209,7 @@ public class DatabaseFileTest {
       JsonElement result = null;
       try {
          result = database.get(keyArray);
-      } catch (WrongArgumentException | IOException e) {
+      } catch (WrongArgumentException e) {
          fail("Exception thrown when not expected");
       }
 
