@@ -1,7 +1,12 @@
 package server.storage;
 
 import com.google.gson.*;
-import server.exception.WrongArgumentException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import server.exception.NoSuchKeyException;
+import server.exception.NoSuchNestedKeyException;
+import server.exception.WrongNestedKeyTypeException;
+import server.exception.WrongValueTypeException;
 
 import java.io.IOException;
 import java.util.concurrent.locks.Lock;
@@ -18,6 +23,7 @@ public class DatabaseFile {
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private Lock readLock = lock.readLock();
     private Lock writeLock = lock.writeLock();
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseFile.class);
 
     public DatabaseFile(String filePath) {
         this.databasePath = filePath;
@@ -32,7 +38,7 @@ public class DatabaseFile {
             try {
                 fileAccess.writeToFile(databasePath, gson.toJson(inMemoryTemp));
             } catch (IOException ex) {
-                e.printStackTrace();
+                logger.info(ex.getMessage());
             }
         }
         inMemory = inMemoryTemp;
@@ -48,7 +54,7 @@ public class DatabaseFile {
         return gson.fromJson(temp, JsonObject.class);
     }
 
-    public void set(JsonArray keyArray, JsonElement value) throws WrongArgumentException, IOException {
+    public void set(JsonArray keyArray, JsonElement value) throws IOException {
 
         writeLock.lock();
         try {
@@ -94,7 +100,7 @@ public class DatabaseFile {
         return temp;
     }
 
-    public JsonElement get(JsonArray keyArray) throws WrongArgumentException {
+    public JsonElement get(JsonArray keyArray) throws WrongNestedKeyTypeException, NoSuchNestedKeyException, NoSuchKeyException, WrongValueTypeException {
 
         JsonElement tempElement;
 
@@ -109,15 +115,15 @@ public class DatabaseFile {
                     if (temp.get(key).isJsonObject())
                         temp = temp.get(key).getAsJsonObject();
                     else
-                        throw new WrongArgumentException("No such key");
+                        throw new WrongNestedKeyTypeException("Wrong nested key type: " + gson.toJson(keyArray));
                 } else
-                    throw new WrongArgumentException("No such key");
+                    throw new NoSuchNestedKeyException("No such nested key: " + gson.toJson(keyArray));
             }
 
             if (temp.has(keyArray.get(keyArray.size() - 1).getAsString())) {
                 tempElement = temp.get(keyArray.get(keyArray.size() - 1).getAsString());
             } else
-                throw new WrongArgumentException("No such key");
+                throw new NoSuchKeyException("No such key: " + gson.toJson(keyArray));
 
         } finally {
             readLock.unlock();
@@ -130,10 +136,10 @@ public class DatabaseFile {
             return tempElement.getAsJsonObject();
         } else if (tempElement.isJsonArray()) {
             return tempElement.getAsJsonArray();
-        } else throw new WrongArgumentException("No such type!");
+        } else throw new WrongValueTypeException("Wrong value for given key: " + gson.toJson(keyArray));
     }
 
-    public void delete(JsonArray keyArray) throws WrongArgumentException, IOException {
+    public void delete(JsonArray keyArray) throws WrongNestedKeyTypeException, NoSuchNestedKeyException, NoSuchKeyException, IOException {
 
         writeLock.lock();
         try {
@@ -146,15 +152,15 @@ public class DatabaseFile {
                     if (temp.get(key).isJsonObject())
                         temp = temp.get(key).getAsJsonObject();
                     else
-                        throw new WrongArgumentException("No such key");
+                        throw new WrongNestedKeyTypeException("Wrong nested key type: " + gson.toJson(keyArray));
                 else
-                    throw new WrongArgumentException("No such key");
+                    throw new NoSuchNestedKeyException("No such nested key: " + gson.toJson(keyArray));
             }
 
             if (temp.has(keyArray.get(keyArray.size() - 1).getAsString())) {
                 temp.remove(keyArray.get(keyArray.size() - 1).getAsString());
             } else
-                throw new WrongArgumentException("No such key");
+                throw new NoSuchKeyException("No such key: " + gson.toJson(keyArray));
 
             String result = gson.toJson(inMemory);
             fileAccess.writeToFile(databasePath, result);

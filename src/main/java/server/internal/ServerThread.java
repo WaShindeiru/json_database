@@ -4,13 +4,17 @@ import client.request.Request;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.Server;
-import server.command.*;
-import server.storage.DatabaseFile;
-import server.exception.WrongArgumentException;
+import server.command.DatabaseCommand;
+import server.exception.*;
 import server.response.Response;
+import server.storage.DatabaseFile;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 
 public class ServerThread implements Runnable {
@@ -20,6 +24,7 @@ public class ServerThread implements Runnable {
     private DatabaseFile database;
     private Gson gson;
     private boolean closeServer;
+    private static final Logger logger = LoggerFactory.getLogger(ServerThread.class);
 
     public ServerThread(Socket socket, Server server, DatabaseFile database) {
         this.socket = socket;
@@ -47,10 +52,10 @@ public class ServerThread implements Runnable {
 
             try {
                 response = command.execute(request);
-            } catch (WrongArgumentException e1) {
+            } catch (NoSuchKeyException | NoSuchNestedKeyException | WrongNestedKeyTypeException | WrongValueTypeException e1) {
                 response = new Response("ERROR", null, e1.getMessage());
             } catch (IOException e2) {
-                System.out.println("Can't access the database file!");
+                logger.info("Can't access the database file!");
                 response = new Response("ERROR", null, "Can't access the database file!");
             }
 
@@ -83,7 +88,7 @@ public class ServerThread implements Runnable {
         return command;
     }
 
-    public Response getCommand(Request request) throws WrongArgumentException, IOException {
+    public Response getCommand(Request request) throws IOException, WrongValueTypeException, NoSuchKeyException, WrongNestedKeyTypeException, NoSuchNestedKeyException {
         JsonArray keyArray = transformJsonElementIntoJsonArray(request.key);
         Response response;
 
@@ -92,7 +97,7 @@ public class ServerThread implements Runnable {
         return response;
     }
 
-    public Response setCommand(Request request) throws WrongArgumentException, IOException {
+    public Response setCommand(Request request) throws IOException {
         JsonArray keyArray = transformJsonElementIntoJsonArray(request.key);
         JsonElement value = request.value;
         Response response;
@@ -107,7 +112,7 @@ public class ServerThread implements Runnable {
         return new Response("OK", null, null);
     }
 
-    public Response deleteCommand(Request request) throws WrongArgumentException, IOException {
+    public Response deleteCommand(Request request) throws IOException, NoSuchKeyException, WrongNestedKeyTypeException, NoSuchNestedKeyException {
         JsonArray keyArray = transformJsonElementIntoJsonArray(request.key);
         Response response;
 

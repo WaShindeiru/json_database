@@ -4,9 +4,9 @@ import com.google.gson.JsonElement;
 
 public class Request {
 
-    public String type = null;
-    public JsonElement key = null;
-    public JsonElement value = null;
+    public String type;
+    public JsonElement key;
+    public JsonElement value;
 
     public Request(String type, JsonElement key, JsonElement value) {
         this.type = type;

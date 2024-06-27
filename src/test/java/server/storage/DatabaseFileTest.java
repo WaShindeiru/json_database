@@ -5,7 +5,8 @@ import client.request.RequestDeserializer;
 import com.google.gson.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import server.exception.WrongArgumentException;
+import server.exception.NoSuchKeyException;
+import server.exception.NoSuchNestedKeyException;
 
 import java.io.IOException;
 
@@ -42,7 +43,7 @@ public class DatabaseFileTest {
 
       try {
          database.set(keyArray, new JsonPrimitive(value));
-      } catch (WrongArgumentException | IOException e) {
+      } catch (IOException e) {
          fail("Exception thrown when not expected");
       }
 
@@ -77,7 +78,7 @@ public class DatabaseFileTest {
       JsonElement result = null;
       try {
          result = database.get(keyArray);
-      } catch (WrongArgumentException e) {
+      } catch (Exception e) {
          fail("Exception thrown when not expected");
       }
 
@@ -108,7 +109,7 @@ public class DatabaseFileTest {
 
       database = new DatabaseFile(path);
 
-      assertThatThrownBy(() -> database.get(secondKeyArray)).isInstanceOf(WrongArgumentException.class);
+      assertThatThrownBy(() -> database.get(secondKeyArray)).isInstanceOf(NoSuchKeyException.class);
    }
 
    @Test
@@ -130,7 +131,7 @@ public class DatabaseFileTest {
       JsonElement result = null;
       try {
          result = database.get(keyArray);
-      } catch (WrongArgumentException e) {
+      } catch (Exception e) {
          fail("Exception thrown when not expected");
       }
       assertThat(result != null).isTrue();
@@ -142,11 +143,11 @@ public class DatabaseFileTest {
 
       try {
          database.delete(keyArray);
-      } catch (WrongArgumentException | IOException e) {
+      } catch (Exception e) {
          fail("Exception thrown when not expected");
       }
 
-      assertThatThrownBy(() -> database.get(keyArray)).isInstanceOf(WrongArgumentException.class);
+      assertThatThrownBy(() -> database.get(keyArray)).isInstanceOf(NoSuchKeyException.class);
    }
 
 
@@ -170,7 +171,7 @@ public class DatabaseFileTest {
       DatabaseFile databaseFile = new DatabaseFile(path);
       try {
          databaseFile.set(keyArray, new JsonPrimitive("value"));
-      } catch (WrongArgumentException | IOException e) {
+      } catch (IOException e) {
          fail("Exception thrown when not expected");
       }
 
@@ -178,7 +179,7 @@ public class DatabaseFileTest {
          JsonElement result = databaseFile.get(keyArray);
          assertThat(result.isJsonPrimitive()).isTrue();
          assertThat(result.getAsString()).isEqualTo("value");
-      } catch (WrongArgumentException e) {
+      } catch (Exception e) {
          fail("Exception thrown when not expected");
       }
    }
@@ -202,14 +203,14 @@ public class DatabaseFileTest {
 
       try {
          database.set(keyArray, new JsonPrimitive(value));
-      } catch (WrongArgumentException | IOException e) {
+      } catch (IOException e) {
          fail("Exception thrown when not expected");
       }
 
       JsonElement result = null;
       try {
          result = database.get(keyArray);
-      } catch (WrongArgumentException e) {
+      } catch (Exception e) {
          fail("Exception thrown when not expected");
       }
 
@@ -240,7 +241,7 @@ public class DatabaseFileTest {
       try {
          database.set(keyArray, value);
          result = database.get(keyArray);
-      } catch (WrongArgumentException | IOException e) {
+      } catch (Exception e) {
          fail("Exception thrown when not expected");
       }
 
@@ -284,7 +285,7 @@ public class DatabaseFileTest {
       try {
          database.set(keyArray, value);
          result = database.get(getKeyArray);
-      } catch (WrongArgumentException | IOException e) {
+      } catch (Exception e) {
          fail("Exception thrown when not expected");
       }
 
@@ -322,7 +323,7 @@ public class DatabaseFileTest {
       try {
          database.set(keyArray, value);
          result = database.get(getKeyArray);
-      } catch (WrongArgumentException | IOException e) {
+      } catch (Exception e) {
          fail("Exception thrown when not expected");
       }
 
@@ -364,7 +365,7 @@ public class DatabaseFileTest {
       try {
          database.set(keyArray, value);
          result = database.get(keyArray);
-      } catch (WrongArgumentException | IOException e) {
+      } catch (Exception e) {
          fail("Exception thrown when not expected");
       }
 
@@ -384,11 +385,11 @@ public class DatabaseFileTest {
 
       try {
          database.delete(getKeyArray);
-      } catch (WrongArgumentException | IOException e) {
+      } catch (Exception e) {
          fail("Exception thrown when not expected");
       }
 
-      assertThatThrownBy(() -> database.get(getKeyArray)).isInstanceOf(WrongArgumentException.class);
+      assertThatThrownBy(() -> database.get(getKeyArray)).isInstanceOf(NoSuchKeyException.class);
    }
 
    @Test
@@ -405,7 +406,7 @@ public class DatabaseFileTest {
       keyArray.add("Bulbasaur");
       keyArray.add("type");
 
-      assertThatThrownBy(() -> database.delete(keyArray)).isInstanceOf(WrongArgumentException.class);
+      assertThatThrownBy(() -> database.delete(keyArray)).isInstanceOf(NoSuchNestedKeyException.class);
    }
 
    @Test
@@ -422,7 +423,7 @@ public class DatabaseFileTest {
       keyArray.add("Bulbasaur");
       keyArray.add("type");
 
-      assertThatThrownBy(() -> database.get(keyArray)).isInstanceOf(WrongArgumentException.class);
+      assertThatThrownBy(() -> database.get(keyArray)).isInstanceOf(NoSuchNestedKeyException.class);
    }
 
    @Test
@@ -444,7 +445,7 @@ public class DatabaseFileTest {
       try {
          database.set(keyArray, new JsonPrimitive("spring"));
          result = database.get(keyArray);
-      } catch (WrongArgumentException | IOException e) {
+      } catch (Exception e) {
          fail("Exception thrown when not expected");
       }
 

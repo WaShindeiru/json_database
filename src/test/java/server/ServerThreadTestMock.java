@@ -11,9 +11,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import server.command.DatabaseCommand;
+import server.exception.*;
 import server.internal.ServerThread;
 import server.storage.DatabaseFile;
-import server.exception.WrongArgumentException;
 import server.response.Response;
 
 import java.io.*;
@@ -47,7 +47,7 @@ public class ServerThreadTestMock {
    private Gson gson = new GsonBuilder().registerTypeAdapter(Request.class, new RequestDeserializer()).create();
 
    @Test
-   public void test_successful_get() throws WrongArgumentException, IOException {
+   public void test_successful_get() throws WrongValueTypeException, NoSuchKeyException, WrongNestedKeyTypeException, NoSuchNestedKeyException {
       JsonElement key = gson.toJsonTree("keykey");
       JsonArray keyArray = new JsonArray();
       keyArray.add(key);
@@ -58,7 +58,7 @@ public class ServerThreadTestMock {
       Response response = null;
       try {
          response = session.getCommand(request);
-      } catch (IOException | WrongArgumentException e) {
+      } catch (Exception e) {
          fail("Exception not expected");
       }
 
@@ -69,7 +69,7 @@ public class ServerThreadTestMock {
    }
 
    @Test
-   public void test_successful_set() throws WrongArgumentException, IOException {
+   public void test_successful_set() throws IOException {
       JsonElement key = new Gson().toJsonTree("testKey");
       JsonArray keyArray = new JsonArray();
       keyArray.add(key);
@@ -79,7 +79,7 @@ public class ServerThreadTestMock {
       Response response = null;
       try {
          response = session.setCommand(request);
-      } catch (IOException | WrongArgumentException e) {
+      } catch (Exception e) {
          fail("Exception not expected here");
       }
 
@@ -91,17 +91,21 @@ public class ServerThreadTestMock {
    }
 
    @Test
-   public void test_successful_delete() throws WrongArgumentException, IOException {
+   public void test_successful_delete() throws IOException, NoSuchKeyException, WrongNestedKeyTypeException, NoSuchNestedKeyException {
       JsonElement key = new JsonPrimitive("existingKey");
       JsonArray keyArray = new JsonArray();
       keyArray.add(key);
       Request request = new Request("delete", key, null);
 
-      // Act
-      Response response = session.deleteCommand(request);
+      Response response = null;
+      try {
+         response = session.deleteCommand(request);
+      } catch (Exception e) {
+         fail("Exception not expected here");
+      }
 
-      // Assert
       Mockito.verify(database).delete(eq(keyArray));
+      assertNotNull(response);
       assertEquals("OK", response.response);
       assertNull(response.value);
       assertNull(response.reason);
@@ -130,7 +134,7 @@ public class ServerThreadTestMock {
    }
 
    @Test
-   public void test_get_command_set() throws WrongArgumentException, IOException {
+   public void test_get_command_set() throws IOException, WrongValueTypeException, NoSuchKeyException, WrongNestedKeyTypeException, NoSuchNestedKeyException {
       ServerThread sessionTemp = Mockito.spy(session);
       JsonArray keyArray = new JsonArray();
       keyArray.add("test1");
@@ -138,47 +142,64 @@ public class ServerThreadTestMock {
       Request request = new Request("set", keyArray, value);
 
       DatabaseCommand command = sessionTemp.getCommannd(request);
-      command.execute(request);
+      try {
+         command.execute(request);
+      } catch (Exception e) {
+         fail("Exception not expected");
+      }
 
       assertNotNull(command);
       Mockito.verify(sessionTemp).setCommand(eq(request));
    }
 
    @Test
-   public void test_get_command_get() throws WrongArgumentException, IOException {
+   public void test_get_command_get() throws IOException, WrongValueTypeException, NoSuchKeyException, WrongNestedKeyTypeException, NoSuchNestedKeyException {
       ServerThread sessionTemp = Mockito.spy(session);
       JsonArray keyArray = new JsonArray();
       keyArray.add("test1");
       Request request = new Request("get", keyArray, null);
 
       DatabaseCommand command = sessionTemp.getCommannd(request);
-      command.execute(request);
+
+      try {
+         command.execute(request);
+      } catch (Exception e) {
+         fail("Exception not expected");
+      }
 
       assertNotNull(command);
       Mockito.verify(sessionTemp).getCommand(eq(request));
    }
 
    @Test
-   public void test_get_command_delete() throws WrongArgumentException, IOException {
+   public void test_get_command_delete() throws IOException, WrongValueTypeException, NoSuchKeyException, WrongNestedKeyTypeException, NoSuchNestedKeyException {
       ServerThread sessionTemp = Mockito.spy(session);
       JsonArray keyArray = new JsonArray();
       keyArray.add("test1");
       Request request = new Request("delete", keyArray, null);
 
       DatabaseCommand command = sessionTemp.getCommannd(request);
-      command.execute(request);
+      try {
+         command.execute(request);
+      } catch (Exception e) {
+         fail("Exception not expected");
+      }
 
       assertNotNull(command);
       Mockito.verify(sessionTemp).deleteCommand(eq(request));
    }
 
    @Test
-   public void test_get_command_exit() throws WrongArgumentException, IOException {
+   public void test_get_command_exit() throws IOException, WrongValueTypeException, NoSuchKeyException, WrongNestedKeyTypeException, NoSuchNestedKeyException {
       ServerThread sessionTemp = Mockito.spy(session);
       Request request = new Request("exit", null, null);
 
       DatabaseCommand command = sessionTemp.getCommannd(request);
-      command.execute(request);
+      try {
+         command.execute(request);
+      } catch (Exception e) {
+         fail("Exception not expected");
+      }
 
       assertNotNull(command);
       Mockito.verify(sessionTemp).exitCommand(eq(request));
