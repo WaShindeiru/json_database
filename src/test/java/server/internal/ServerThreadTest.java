@@ -1,4 +1,4 @@
-package server;
+package server.internal;
 
 import client.request.Request;
 import client.request.RequestDeserializer;
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import server.internal.ServerThread;
+import server.Server;
 import server.storage.DatabaseFile;
 import server.storage.FileAccess;
 import server.response.Response;

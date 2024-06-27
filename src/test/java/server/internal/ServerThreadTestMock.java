@@ -1,4 +1,4 @@
-package server;
+package server.internal;
 
 import client.request.Request;
 import client.request.RequestDeserializer;
@@ -10,9 +10,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import server.Server;
 import server.command.DatabaseCommand;
 import server.exception.*;
-import server.internal.ServerThread;
 import server.storage.DatabaseFile;
 import server.response.Response;
 
