@@ -1,7 +1,7 @@
-package com.griddynamics.server;
+package com.database.server;
 
-import com.griddynamics.server.session.ServerThread;
-import com.griddynamics.server.storage.DatabaseFile;
+import com.database.server.session.ServerThread;
+import com.database.server.storage.DatabaseFile;
 
 import java.io.IOException;
 import java.net.InetAddress;

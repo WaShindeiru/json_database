@@ -1,6 +1,6 @@
-package com.griddynamics.server;
+package com.database.server;
 
-import com.griddynamics.server.Server;
+import com.database.server.Server;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -1,9 +1,9 @@
-package com.griddynamics.server.storage;
+package com.database.server.storage;
 
-import com.griddynamics.client.request.Request;
-import com.griddynamics.client.request.RequestDeserializer;
+import com.database.client.request.Request;
+import com.database.client.request.RequestDeserializer;
 import com.google.gson.*;
-import com.griddynamics.server.storage.util.FileAccess;
+import com.database.server.storage.util.FileAccess;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

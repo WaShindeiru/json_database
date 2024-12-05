@@ -1,4 +1,4 @@
-package com.griddynamics.server;
+package com.database.server;
 
 public class Main {
 

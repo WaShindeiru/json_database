@@ -1,14 +1,14 @@
-package com.griddynamics.client;
+package com.database.client;
 
-import com.griddynamics.client.request.Request;
-import com.griddynamics.client.request.RequestDeserializer;
+import com.database.client.request.Request;
+import com.database.client.request.RequestDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonPrimitive;
 import org.junit.jupiter.api.Test;
-import com.griddynamics.server.storage.util.FileAccess;
-import com.griddynamics.server.session.Response;
-import com.griddynamics.server.Server;
+import com.database.server.storage.util.FileAccess;
+import com.database.server.session.Response;
+import com.database.server.Server;
 
 import java.io.DataInputStream;
 import java.io.IOException;

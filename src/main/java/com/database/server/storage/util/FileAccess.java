@@ -1,4 +1,4 @@
-package com.griddynamics.server.storage.util;
+package com.database.server.storage.util;
 
 import java.io.*;
 

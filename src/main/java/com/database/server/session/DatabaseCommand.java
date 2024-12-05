@@ -1,10 +1,10 @@
-package com.griddynamics.server.session;
+package com.database.server.session;
 
-import com.griddynamics.client.request.Request;
-import com.griddynamics.server.storage.NoSuchNestedKeyException;
-import com.griddynamics.server.storage.NoSuchKeyException;
-import com.griddynamics.server.storage.WrongNestedKeyTypeException;
-import com.griddynamics.server.storage.WrongValueTypeException;
+import com.database.client.request.Request;
+import com.database.server.storage.NoSuchNestedKeyException;
+import com.database.server.storage.NoSuchKeyException;
+import com.database.server.storage.WrongNestedKeyTypeException;
+import com.database.server.storage.WrongValueTypeException;
 
 import java.io.IOException;
 

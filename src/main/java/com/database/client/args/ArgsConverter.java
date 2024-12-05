@@ -1,4 +1,4 @@
-package com.griddynamics.client.args;
+package com.database.client.args;
 
 import com.beust.jcommander.IStringConverter;
 import com.google.gson.Gson;

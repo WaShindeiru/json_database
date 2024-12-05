@@ -1,7 +1,7 @@
-package com.griddynamics.server.storage;
+package com.database.server.storage;
 
 import com.google.gson.*;
-import com.griddynamics.server.storage.util.FileAccess;
+import com.database.server.storage.util.FileAccess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

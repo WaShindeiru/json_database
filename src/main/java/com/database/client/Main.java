@@ -1,4 +1,4 @@
-package com.griddynamics.client;
+package com.database.client;
 
 public class Main {
 

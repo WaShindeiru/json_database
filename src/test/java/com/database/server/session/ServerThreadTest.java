@@ -1,7 +1,7 @@
-package com.griddynamics.server.session;
+package com.database.server.session;
 
-import com.griddynamics.client.request.Request;
-import com.griddynamics.client.request.RequestDeserializer;
+import com.database.client.request.Request;
+import com.database.client.request.RequestDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonPrimitive;
@@ -11,9 +11,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import com.griddynamics.server.Server;
-import com.griddynamics.server.storage.DatabaseFile;
-import com.griddynamics.server.storage.util.FileAccess;
+import com.database.server.Server;
+import com.database.server.storage.DatabaseFile;
+import com.database.server.storage.util.FileAccess;
 
 import java.io.*;
 import java.net.Socket;

@@ -1,9 +1,9 @@
-package com.griddynamics.client.request;
+package com.database.client.request;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.griddynamics.client.request.Request;
-import com.griddynamics.client.request.RequestDeserializer;
+import com.database.client.request.Request;
+import com.database.client.request.RequestDeserializer;
 import org.junit.jupiter.api.Test;
 
 public class RequestDeserializeTest {

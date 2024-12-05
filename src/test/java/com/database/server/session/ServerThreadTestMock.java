@@ -1,12 +1,12 @@
-package com.griddynamics.server.session;
+package com.database.server.session;
 
-import com.griddynamics.client.request.Request;
-import com.griddynamics.client.request.RequestDeserializer;
+import com.database.client.request.Request;
+import com.database.client.request.RequestDeserializer;
 import com.google.gson.*;
-import com.griddynamics.server.storage.NoSuchKeyException;
-import com.griddynamics.server.storage.NoSuchNestedKeyException;
-import com.griddynamics.server.storage.WrongNestedKeyTypeException;
-import com.griddynamics.server.storage.WrongValueTypeException;
+import com.database.server.storage.NoSuchKeyException;
+import com.database.server.storage.NoSuchNestedKeyException;
+import com.database.server.storage.WrongNestedKeyTypeException;
+import com.database.server.storage.WrongValueTypeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,8 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import com.griddynamics.server.Server;
-import com.griddynamics.server.storage.DatabaseFile;
+import com.database.server.Server;
+import com.database.server.storage.DatabaseFile;
 
 import java.io.*;
 import java.net.Socket;

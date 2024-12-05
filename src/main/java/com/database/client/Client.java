@@ -1,13 +1,13 @@
-package com.griddynamics.client;
+package com.database.client;
 
-import com.griddynamics.client.args.Args;
-import com.griddynamics.client.request.Request;
-import com.griddynamics.client.request.RequestDeserializer;
+import com.database.client.args.Args;
+import com.database.client.request.Request;
+import com.database.client.request.RequestDeserializer;
 import com.beust.jcommander.JCommander;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.griddynamics.server.storage.util.FileAccess;
+import com.database.server.storage.util.FileAccess;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

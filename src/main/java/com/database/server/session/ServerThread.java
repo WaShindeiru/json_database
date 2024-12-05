@@ -1,11 +1,11 @@
-package com.griddynamics.server.session;
+package com.database.server.session;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.griddynamics.client.request.Request;
-import com.griddynamics.server.Server;
-import com.griddynamics.server.storage.*;
+import com.database.client.request.Request;
+import com.database.server.Server;
+import com.database.server.storage.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

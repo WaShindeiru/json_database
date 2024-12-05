@@ -1,4 +1,4 @@
-package com.griddynamics.server.session;
+package com.database.server.session;
 
 import com.google.gson.JsonElement;
 

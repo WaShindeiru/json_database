@@ -1,4 +1,4 @@
-package com.griddynamics.client.request;
+package com.database.client.request;
 
 import com.google.gson.JsonElement;
 
